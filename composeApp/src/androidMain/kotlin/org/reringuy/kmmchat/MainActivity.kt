@@ -3,6 +3,7 @@ package org.reringuy.kmmchat
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -11,7 +12,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            app()
+            app(
+                darkTheme = isSystemInDarkTheme(),
+                dynamicColor = false
+            )
         }
     }
 }
@@ -19,5 +23,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    app()
+    app(false, false)
 }

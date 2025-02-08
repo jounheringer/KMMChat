@@ -7,7 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.ksp.generated.module
-import org.reringuy.kmmchat.screens.login.LoginScreen
+import org.reringuy.kmmchat.screens.login.LoginWrapper
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setContent {
-            LoginScreen()
+            LoginWrapper()
         }
     }
 }

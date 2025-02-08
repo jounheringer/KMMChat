@@ -20,11 +20,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import org.reringuy.kmmchat.viewmodels.LoginViewModel
 
 @Composable
-fun LoginScreen(
-    modifier: Modifier = Modifier
-) {
+fun LoginWrapper() {
+    val viewModel = getViewModel(
+        key = "login-screen",
+        factory = viewModelFactory {
+            LoginViewModel()
+        }
+    )
+
+    LoginScreen()
+}
+
+@Composable
+fun LoginScreen() {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val showPassword = remember { mutableStateOf(false) }
@@ -33,7 +46,7 @@ fun LoginScreen(
         contentAlignment = Alignment.Center
         ) {
         Column(
-            modifier = modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -53,7 +66,7 @@ fun LoginScreen(
                         onCheckedChange = { showPassword.value = !showPassword.value }
                     ) {
                         Icon(
-                            modifier = modifier.size(48.dp),
+                            modifier = Modifier.size(48.dp),
                             contentDescription = "Mostrar senha",
                             imageVector = if (!showPassword.value)
                                 Icons.Outlined.Close

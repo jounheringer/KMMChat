@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.sqldelight)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 kotlin {
@@ -35,13 +37,13 @@ kotlin {
         commonMain.dependencies {
             // put your Multiplatform dependencies here
             implementation(libs.lifecycle.viewmodel.compose)
+            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.navigation.compose)
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.annotations)
-            implementation(libs.lifecycle.viewmodel)
-            implementation(libs.navigation.compose)
         }
     }
 }
@@ -61,6 +63,10 @@ android {
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.android)
     add("kspCommonMainMetadata", libs.ksp.compiler)
+    commonMainApi(libs.moko.core)
+    commonMainApi(libs.moko.compose)
+    commonMainApi(libs.moko.flow)
+    commonMainApi(libs.moko.flow.compose)
 }
 
 tasks.withType<KotlinCompilationTask<*>>().configureEach {

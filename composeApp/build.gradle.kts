@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -14,7 +15,8 @@ kotlin {
 
     androidTarget {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+            jvmTarget.set(JvmTarget.JVM_17)
+            freeCompilerArgs.add("-Xexpect-actual-classes")
         }
     }
     
@@ -27,6 +29,7 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
             binaryOption("bundleId", "com.reringuy.kmmchat.ComposeApp")
+            freeCompilerArgs += listOf("-Xexport-kdoc", "-Xexpect-actual-classes")
         }
     }
     
@@ -42,26 +45,20 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(projects.shared)
-            api(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.lifecycle.viewmodel)
-            implementation(libs.navigation.compose)
         }
     }
 }
 
 android {
     namespace = "org.reringuy.kmmchat"
-    compileSdk = 35
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "org.reringuy.kmmchat"
@@ -76,33 +73,29 @@ android {
         }
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
-
-    buildFeatures {
-        compose = true
-    }
-
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
+        debug {
+            aaptOptions.cruncherEnabled = false
+        }
+        release {
+            aaptOptions.cruncherEnabled = true
+        }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
 dependencies {
-    implementation(libs.androidx.ui.text.android)
-    implementation(libs.tooling.preview)
-    implementation(libs.androidx.material)
-    implementation(libs.androidx.material3)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.androidx.constraintlayout)
-    debugImplementation(libs.tooling.preview.debug)
-    debugImplementation(compose.uiTooling)
+    implementation(libs.koin.annotations)
+    implementation(libs.ksp.compiler)
+    commonMainApi(libs.moko.compose)
+    commonMainApi(libs.moko.flow.compose)
+    implementation(libs.koin.core)
+    implementation(project.dependencies.platform(libs.koin.bom))
 }
 
